@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>محاكاة تقييم بطاقة ائتمان</title>
+  <style>
+    body { font-family: Tahoma, sans-serif; background-color: #111; color: #eee; text-align: center; padding: 30px; }
+    .container { background: #1a1a1a; padding: 30px; border-radius: 10px; display: inline-block; width: 400px; }
+    input, button { width: 90%; padding: 10px; margin: 10px 0; border: none; border-radius: 5px; font-size: 16px; }
+    input { background: #333; color: #eee; }
+    button { background: #28a745; color: white; cursor: pointer; }
+    button:hover { background: #218838; }
+    .result { margin-top: 20px; background: #222; padding: 15px; border-radius: 8px; text-align: right; }
+    .safe { color: #28a745; }
+    .medium { color: #ffc107; }
+    .high { color: #dc3545; }
+  </style>
+</head>
+<body>
+  <h1>💳 نظام تقييم بطاقة ائتمان (تجريبي)</h1>
+  <div class="container">
+    <form method="post">
+      <input type="text" name="cardNumber" placeholder="رقم البطاقة (16 رقم)" required><br>
+      <input type="text" name="cvv" placeholder="CVV" required><br>
+      <input type="text" name="address" placeholder="العنوان" required><br>
+      <input type="text" name="zipcode" placeholder="الرمز البريدي" required><br>
+      <button type="submit">تحقق الآن</button>
+    </form>
+    {% if result %}
+      <div class="result {{ result.level_class }}">
+        {% if not result.valid %}
+          <p>{{ result.message }}</p>
+        {% else %}
+          <h3>النتائج:</h3>
+          <p><strong>مستوى الخطورة:</strong> {{ result.level }}</p>
+          <p><strong>النقاط:</strong> {{ result.score }}</p>
+          <p><strong>التحليل:</strong></p>
+          <ul>
+            {% for reason in result.reasons %}
+              <li>{{ reason }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</body>
+</html>
